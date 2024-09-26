@@ -1,0 +1,29 @@
+cppHeaderFileInclude {
+}
+
+licenseUpdateExclude {
+  /
+}
+
+cppSrcFileInclude {
+}
+
+modifiableFileExclude {
+  gradlew
+}
+
+generatedFileExclude {
+  FtcRobotController/
+  .png$
+  .PNG$
+  .pdf$
+  .wav$
+  .keystore$
+  .jar$
+}
+
+repoRootNameOverride {
+}
+
+includeOtherLibs {
+}
