@@ -13,11 +13,14 @@ import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.FlightRecorder;
 import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.LynxFirmware;
+import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
+import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.gosftc.lib.rr.actions.MecanumFollowTrajectoryAction;
 import com.gosftc.lib.rr.actions.MecanumTurnAction;
 import com.gosftc.lib.rr.drive.MecanumDrivetrain;
 import com.gosftc.lib.rr.localizer.Localizer;
 import com.gosftc.lib.rr.localizer.MecanumDriveLocalizer;
+import com.gosftc.lib.rr.localizer.ThreeDeadWheelLocalizer;
 import com.gosftc.lib.rr.params.MecanumControlParams;
 import com.gosftc.lib.rr.params.PathProfileParams;
 import com.gosftc.lib.rr.params.TurnProfileCommands;
@@ -25,6 +28,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -63,13 +67,13 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        private static final double IN_PER_TICK = 1;
-        private static final double LATERAL_IN_PER_TICK = IN_PER_TICK;
-        private static final double TRACK_WIDTH_TICKS = 0;
+        private static final double IN_PER_TICK = 72.0 / 24164;
+        private static final double LATERAL_IN_PER_TICK = 0.002458710483066915;
+        private static final double TRACK_WIDTH_TICKS = 5024.768255226936;
 
         // feedforward parameters (in tick units)
-        private static final double KS = 0;
-        private static final double KV = 0;
+        private static final double KS = 0.7629513277738496;
+        private static final double KV = 0.0005866164156085399;
         private static final double KA = 0;
 
         // path profile parameters (in inches)
@@ -122,7 +126,8 @@ public final class MecanumDrive {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions if needed
-        //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
@@ -131,8 +136,19 @@ public final class MecanumDrive {
 
         VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        Localizer localizer = new MecanumDriveLocalizer(leftFront, leftBack, rightBack, rightFront, m_lazyImu, KINEMATICS, Params.IN_PER_TICK);
+        OverflowEncoder perp = new OverflowEncoder(new RawEncoder(rightBack));
+        OverflowEncoder par01 = new OverflowEncoder(new RawEncoder(leftBack));
+        OverflowEncoder par00 = new OverflowEncoder(new RawEncoder(leftFront));
 
+        par00.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        ThreeDeadWheelLocalizer.Params localizationParams = new ThreeDeadWheelLocalizer.Params(
+                -1407.4654230242797,
+                1336.184365718661,
+                -2416.80776445002,
+                Params.IN_PER_TICK);
+
+        Localizer localizer = new ThreeDeadWheelLocalizer(par00, par01, perp, localizationParams);
         m_drive = new MecanumDrivetrain(leftFront, leftBack, rightBack, rightFront, pose, voltageSensor, localizer);
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }

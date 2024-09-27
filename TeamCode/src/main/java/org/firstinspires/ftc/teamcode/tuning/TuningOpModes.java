@@ -23,13 +23,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.mecanum.MecanumLocalizationTest;
 import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.mecanum.MecanumManualFeedbackTuner;
 import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.mecanum.MecanumSplineTest;
-import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.tank.TankLocalizationTest;
-import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.tank.TankManualFeedbackTuner;
-import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.tank.TankSplineTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -87,34 +83,6 @@ public final class TuningOpModes {
                         () -> MecanumDrive.PARAMS.controllerParams.createFeedForward(MecanumDrive.PARAMS.getInchesPerTick())
                 );
             };
-        } else if (DRIVE_CLASS.equals(TankDrive.class)) {
-            dvf = hardwareMap -> {
-                TankDrive td = new TankDrive(hardwareMap, new Pose2d(0, 0, 0));
-
-                Localizer localizer = td.getLocalizer();
-                List<Encoder> leftEncs = localizer.getLeftEncoders();
-                List<Encoder> rightEncs = localizer.getRightEncoders();
-                List<Encoder> parEncs = localizer.getParallelEncoders();
-                List<Encoder> perpEncs = localizer.getPerpendicularEncoders();
-
-                return new DriveView(
-                    DriveType.TANK,
-                        TankDrive.PARAMS.getInchesPerTick(),
-                        TankDrive.PARAMS.pathProfileParams.maxWheelVel,
-                        TankDrive.PARAMS.pathProfileParams.minProfileAccel,
-                        TankDrive.PARAMS.pathProfileParams.maxProfileAccel,
-                        hardwareMap.getAll(LynxModule.class),
-                        td.getDrive().getLeftMotors(),
-                        td.getDrive().getRightMotors(),
-                        leftEncs,
-                        rightEncs,
-                        parEncs,
-                        perpEncs,
-                        td.lazyImu,
-                        td.getDrive().voltageSensor,
-                        () -> TankDrive.PARAMS.controllerParams.createFeedForward(TankDrive.PARAMS.getInchesPerTick())
-                );
-            };
         } else {
             throw new RuntimeException();
         }
@@ -142,12 +110,6 @@ public final class TuningOpModes {
             manager.register(metaForClass(MecanumLocalizationTest.class), MecanumLocalizationTest.class);
 
             configClazzes.add(MecanumManualFeedbackTuner.class);
-        } else if (DRIVE_CLASS.equals(TankDrive.class)) {
-            manager.register(metaForClass(TankManualFeedbackTuner.class), TankManualFeedbackTuner.class);
-            manager.register(metaForClass(TankSplineTest.class), TankSplineTest.class);
-            manager.register(metaForClass(TankLocalizationTest.class), TankLocalizationTest.class);
-
-            configClazzes.add(TankManualFeedbackTuner.class);
         }
 
         FtcDashboard.getInstance().withConfigRoot(configRoot -> {
