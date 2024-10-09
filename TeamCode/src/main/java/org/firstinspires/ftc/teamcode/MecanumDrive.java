@@ -74,7 +74,7 @@ public final class MecanumDrive {
         // feedforward parameters (in tick units)
         private static final double KS = 0.7629513277738496;
         private static final double KV = 0.0005866164156085399;
-        private static final double KA = 0;
+        private static final double KA = 0.00001;
 
         // path profile parameters (in inches)
         private static final double MAX_WHEEL_VEL = 50;
@@ -86,9 +86,9 @@ public final class MecanumDrive {
         private static final double MAX_ANG_ACCEL = Math.PI;
 
         // path controller gains
-        private static final double AXIAL_GAIN = 0.0;
-        private static final double LATERAL_GAIN = 0.0;
-        private static final double HEADING_GAIN = 0.0; // shared with turn
+        private static final double AXIAL_GAIN = 4.5;
+        private static final double LATERAL_GAIN = 6.0;
+        private static final double HEADING_GAIN = 20.0; // shared with turn
 
         private static final double AXIAL_VEL_GAIN = 0.0;
         private static final double LATERAL_VEL_GAIN = 0.0;
