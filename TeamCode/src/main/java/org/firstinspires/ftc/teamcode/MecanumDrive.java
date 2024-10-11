@@ -188,4 +188,13 @@ public final class MecanumDrive {
                 DEFAULT_VEL_CONSTRAINT, DEFAULT_ACCEL_CONSTRAINT
         );
     }
+    public void fieldRelativeDrive(double forward, double side, double rotation) {
+        double gyro_radians = m_drive.getPose().heading.toDouble();
+        double temp = forward * Math.cos(gyro_radians) + side * Math.sin(gyro_radians);
+        side = -forward * Math.sin(gyro_radians) + side * Math.cos(gyro_radians);
+        forward = temp;
+
+
+
+    }
 }
