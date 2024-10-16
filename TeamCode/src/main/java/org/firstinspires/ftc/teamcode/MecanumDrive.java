@@ -194,7 +194,13 @@ public final class MecanumDrive {
         side = -forward * Math.sin(gyro_radians) + side * Math.cos(gyro_radians);
         forward = temp;
 
+        PoseVelocity2d pose2d = new PoseVelocity2d(new Vector2d(forward, side), rotation);
 
+        m_drive.setDrivePowers(pose2d);
+
+    }
+    public void zeroWheels() {
+        m_drive.zeroPose();
 
     }
 }

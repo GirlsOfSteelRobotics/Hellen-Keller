@@ -53,7 +53,7 @@ public class MecanumDrivetrain {
         MecanumKinematics.WheelVelocities<Time> wheelVels = new MecanumKinematics(1).inverse(
                 PoseVelocity2dDual.constant(powers, 1));
 
-        double maxPowerMag = 1;
+        double maxPowerMag = 1.0;
         for (DualNum<Time> power : wheelVels.all()) {
             maxPowerMag = Math.max(maxPowerMag, power.value());
         }
@@ -126,6 +126,10 @@ public class MecanumDrivetrain {
 
     public double getVoltage() {
         return voltageSensor.getVoltage();
+    }
+
+    public void zeroPose() {
+        pose = new Pose2d(0, 0, 0);
     }
 
     public Localizer getLocalizer() {

@@ -17,15 +17,23 @@ public class Main {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-4, 0, 0))
-                .lineToX(30)
-                .turn(Math.toRadians(90))
-                .lineToY(30)
-                .turn(Math.toRadians(90))
-                .lineToX(0)
-                .turn(Math.toRadians(90))
-                .lineToY(0)
-                .turn(Math.toRadians(90))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, -61, Math.toRadians(90)))
+                //Math.toRadians means that the robot ends at the angle given
+                .splineTo(new Vector2d(-37,-9), Math.toRadians(90))
+                                .strafeTo(new Vector2d(-41,-9))
+                .splineToConstantHeading(new Vector2d(-55,-55), Math.toRadians(-180))
+
+
+
+
+
+//                .turn(Math.toRadians(90))
+//                .lineToY(30)
+//                .turn(Math.toRadians(90))
+//                .lineToX(0)
+//                .turn(Math.toRadians(90))
+//                .lineToY(0)
+//                .turn(Math.toRadians(90))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
