@@ -17,11 +17,25 @@ public class Main {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, -61, Math.toRadians(90)))
-                //Math.toRadians means that the robot ends at the angle given
-                .splineTo(new Vector2d(-37,-9), Math.toRadians(90))
-                                .strafeTo(new Vector2d(-41,-9))
-                .splineToConstantHeading(new Vector2d(-55,-55), Math.toRadians(-180))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-35, -61, Math.toRadians(-90)))
+                // START COPY AND PASTE
+                .setReversed(true)
+                .splineTo(new Vector2d(-35.5,-9), Math.toRadians(90))
+                .strafeTo(new Vector2d(-45,-9))
+                .strafeToConstantHeading(new Vector2d(-45,-55))
+                .strafeTo(new Vector2d(-60,-60))
+                .strafeTo(new Vector2d(-45, - 38))
+                .strafeTo(new Vector2d(-45, -9))
+                .strafeTo(new Vector2d(-56,-9))
+                .strafeTo(new Vector2d(-56,-60))
+                .strafeTo(new Vector2d(-56,-40))
+                .strafeTo(new Vector2d(-56,-8))
+                .turn(Math.toRadians(-90))
+                .strafeTo(new Vector2d(-53,-8))
+                .strafeTo(new Vector2d(-53,-29))
+                .strafeTo(new Vector2d(-63,-29))
+                .strafeTo(new Vector2d(-63,-60))
+                // END COPY AND PASTE
 
 
 
