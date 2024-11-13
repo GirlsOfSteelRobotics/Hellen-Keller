@@ -134,8 +134,16 @@ public final class MecanumDrive {
 
         VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        GoBildaPinpointDriverRR localizer = hardwareMap.get(GoBildaPinpointDriverRR.class, "odo");
-        m_drive = new MecanumDrivetrain(leftFront, leftBack, rightBack, rightFront, pose, voltageSensor, localizer);
+        GoBildaPinpointDriverRR odo = hardwareMap.get(GoBildaPinpointDriverRR.class, "odo");
+        odo.setOffsets(-84.0, -168.0); //these are tuned for 3110-0002-0001 Product Insight #1
+        odo.setEncoderResolution(GoBildaPinpointDriverRR.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odo.setEncoderDirections(GoBildaPinpointDriverRR.EncoderDirection.FORWARD, GoBildaPinpointDriverRR.EncoderDirection.REVERSED);
+
+        odo.resetPosAndIMU();
+
+
+
+        m_drive = new MecanumDrivetrain(leftFront, leftBack, rightBack, rightFront, pose, voltageSensor, odo);
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
