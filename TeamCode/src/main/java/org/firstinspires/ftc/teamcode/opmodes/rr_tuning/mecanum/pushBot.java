@@ -30,7 +30,7 @@ public class pushBot extends LinearOpMode {
                 .turn(Math.toRadians(-90))
                 .strafeTo(new Vector2d(-53,-8))
                 .strafeTo(new Vector2d(-53,-29))
-                .strafeTo(new Vector2d(-63,-29))
+                .strafeTo(new Vector2d(-63,-20))
                 .strafeTo(new Vector2d(-63,-60))
 
 

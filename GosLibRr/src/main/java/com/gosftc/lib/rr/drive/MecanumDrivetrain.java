@@ -9,6 +9,8 @@ import com.acmerobotics.roadrunner.PoseVelocity2dDual;
 import com.acmerobotics.roadrunner.Time;
 import com.acmerobotics.roadrunner.Twist2dDual;
 import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
+import com.gosftc.lib.rr.localizer.GoBildaPinpointDriver;
 import com.gosftc.lib.rr.localizer.Localizer;
 import com.gosftc.lib.rr.messages.DriveCommandMessage;
 import com.gosftc.lib.rr.messages.MecanumCommandMessage;
@@ -35,11 +37,11 @@ public class MecanumDrivetrain {
 
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
-    private final Localizer localizer;
-
     private Pose2d pose;
 
-    public MecanumDrivetrain(DcMotorEx leftFront, DcMotorEx leftBack, DcMotorEx rightBack, DcMotorEx rightFront, Pose2d pose, VoltageSensor voltageSensor, Localizer localizer) {
+    private GoBildaPinpointDriverRR localizer;
+
+    public MecanumDrivetrain(DcMotorEx leftFront, DcMotorEx leftBack, DcMotorEx rightBack, DcMotorEx rightFront, Pose2d pose, VoltageSensor voltageSensor, GoBildaPinpointDriverRR localizer) {
         this.leftFront = leftFront;
         this.leftBack = leftBack;
         this.rightBack = rightBack;
@@ -95,8 +97,8 @@ public class MecanumDrivetrain {
     }
 
     public PoseVelocity2d updatePoseEstimate() {
-        Twist2dDual<Time> twist = localizer.update();
-        pose = pose.plus(twist.value());
+        localizer.update();
+        pose = localizer.getPositionRR();
 
         poseHistory.add(pose);
         while (poseHistory.size() > 100) {
@@ -105,7 +107,7 @@ public class MecanumDrivetrain {
 
         estimatedPoseWriter.write(new PoseMessage(pose));
 
-        return twist.velocity().value();
+        return localizer.getVelocityRR();
     }
 
     public Pose2d getPose() {
@@ -132,7 +134,7 @@ public class MecanumDrivetrain {
         pose = new Pose2d(0, 0, 0);
     }
 
-    public Localizer getLocalizer() {
+    public GoBildaPinpointDriverRR getLocalizer() {
         return localizer;
     }
 

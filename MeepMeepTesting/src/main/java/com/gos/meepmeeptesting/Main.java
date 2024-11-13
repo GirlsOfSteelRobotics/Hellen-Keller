@@ -33,7 +33,7 @@ public class Main {
                 .turn(Math.toRadians(-90))
                 .strafeTo(new Vector2d(-53,-8))
                 .strafeTo(new Vector2d(-53,-29))
-                .strafeTo(new Vector2d(-63,-29))
+                .strafeTo(new Vector2d(-63,-20))
                 .strafeTo(new Vector2d(-63,-60))
                 // END COPY AND PASTE
 

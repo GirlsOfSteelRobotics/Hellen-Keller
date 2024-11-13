@@ -11,10 +11,12 @@ import com.acmerobotics.roadrunner.ftc.DriveViewFactory;
 import com.acmerobotics.roadrunner.ftc.Encoder;
 import com.acmerobotics.roadrunner.ftc.ForwardPushTest;
 import com.acmerobotics.roadrunner.ftc.ForwardRampLogger;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.acmerobotics.roadrunner.ftc.LateralPushTest;
 import com.acmerobotics.roadrunner.ftc.LateralRampLogger;
 import com.acmerobotics.roadrunner.ftc.ManualFeedforwardTuner;
 import com.acmerobotics.roadrunner.ftc.MecanumMotorDirectionDebugger;
+import com.acmerobotics.roadrunner.ftc.PinpointEncoder;
 import com.gosftc.lib.rr.localizer.Localizer;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -27,6 +29,7 @@ import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.mecanum.MecanumLocalizat
 import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.mecanum.MecanumManualFeedbackTuner;
 import org.firstinspires.ftc.teamcode.opmodes.rr_tuning.mecanum.MecanumSplineTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,11 +62,11 @@ public final class TuningOpModes {
             dvf = hardwareMap -> {
                 MecanumDrive md = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
-                Localizer localizer = md.getLocalizer();
-                List<Encoder> leftEncs = localizer.getLeftEncoders();
-                List<Encoder> rightEncs = localizer.getRightEncoders();
-                List<Encoder> parEncs = localizer.getParallelEncoders();
-                List<Encoder> perpEncs = localizer.getPerpendicularEncoders();
+                GoBildaPinpointDriverRR localizer = md.getLocalizer();
+                List<Encoder> leftEncs = new ArrayList<>();
+                List<Encoder> rightEncs = new ArrayList<>();
+                List<Encoder> parEncs = new ArrayList<>();
+                List<Encoder> perpEncs = new ArrayList<>();
 
                 return new DriveView(
                     DriveType.MECANUM,

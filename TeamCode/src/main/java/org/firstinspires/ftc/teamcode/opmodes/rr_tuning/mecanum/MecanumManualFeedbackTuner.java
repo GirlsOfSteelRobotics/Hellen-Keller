@@ -12,7 +12,7 @@ public final class MecanumManualFeedbackTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        drive.getLocalizer().validateParams();
+        // drive.getLocalizer().validateParams();
 
         waitForStart();
 

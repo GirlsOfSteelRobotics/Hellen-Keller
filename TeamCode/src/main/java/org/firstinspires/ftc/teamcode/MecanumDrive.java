@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.FlightRecorder;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.LynxFirmware;
 import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
@@ -18,9 +19,6 @@ import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.gosftc.lib.rr.actions.MecanumFollowTrajectoryAction;
 import com.gosftc.lib.rr.actions.MecanumTurnAction;
 import com.gosftc.lib.rr.drive.MecanumDrivetrain;
-import com.gosftc.lib.rr.localizer.Localizer;
-import com.gosftc.lib.rr.localizer.MecanumDriveLocalizer;
-import com.gosftc.lib.rr.localizer.ThreeDeadWheelLocalizer;
 import com.gosftc.lib.rr.params.MecanumControlParams;
 import com.gosftc.lib.rr.params.PathProfileParams;
 import com.gosftc.lib.rr.params.TurnProfileCommands;
@@ -136,24 +134,12 @@ public final class MecanumDrive {
 
         VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        OverflowEncoder perp = new OverflowEncoder(new RawEncoder(rightBack));
-        OverflowEncoder par01 = new OverflowEncoder(new RawEncoder(leftBack));
-        OverflowEncoder par00 = new OverflowEncoder(new RawEncoder(leftFront));
-
-        par00.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        ThreeDeadWheelLocalizer.Params localizationParams = new ThreeDeadWheelLocalizer.Params(
-                -1407.4654230242797,
-                1336.184365718661,
-                -2416.80776445002,
-                Params.IN_PER_TICK);
-
-        Localizer localizer = new ThreeDeadWheelLocalizer(par00, par01, perp, localizationParams);
+        GoBildaPinpointDriverRR localizer = hardwareMap.get(GoBildaPinpointDriverRR.class, "odo");
         m_drive = new MecanumDrivetrain(leftFront, leftBack, rightBack, rightFront, pose, voltageSensor, localizer);
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
-    public Localizer getLocalizer() {
+    public GoBildaPinpointDriverRR getLocalizer() {
         return m_drive.getLocalizer();
     }
 
