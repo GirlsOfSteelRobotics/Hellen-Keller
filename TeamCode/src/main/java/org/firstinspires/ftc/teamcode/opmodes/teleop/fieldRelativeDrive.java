@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.Subsystems.linearSlide;
+import org.firstinspires.ftc.teamcode.Subsystems.ClawServoSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.LinearSlide;
 
 @TeleOp
 public class fieldRelativeDrive extends LinearOpMode {
@@ -14,7 +15,8 @@ public class fieldRelativeDrive extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        linearSlide  slide = new linearSlide(hardwareMap);
+        LinearSlide slide = new LinearSlide(hardwareMap);
+        ClawServoSubsystem claw = new ClawServoSubsystem(hardwareMap);
         waitForStart();
 
         while (opModeIsActive()) {
@@ -44,6 +46,13 @@ public class fieldRelativeDrive extends LinearOpMode {
             }
             //need encoders!!!!!
 
+            if(gamepad1.x) {
+                claw.openClaw();
+            } else if(gamepad1.y) {
+                claw.closeClaw();
+            } else {
+                claw.stopClaw();
+            }
         }
 
 

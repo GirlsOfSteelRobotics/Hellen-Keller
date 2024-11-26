@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+        import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-public class linearSlide {
+public class LinearSlide {
     private static final double TICKS_PER_INCH = 1;
 
     public static final double GROUND_HEIGHT = 0;
@@ -18,7 +15,7 @@ public class linearSlide {
     private final DcMotor linearSlide;
     //might not be final just make sure later
 
-    public linearSlide (HardwareMap hardwareMap) {
+    public LinearSlide(HardwareMap hardwareMap) {
         linearSlide = hardwareMap.get(DcMotor.class, "motorLinearSlide");
         linearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
         //change "linearSlide" to the name that we configured on the phone, once charged
