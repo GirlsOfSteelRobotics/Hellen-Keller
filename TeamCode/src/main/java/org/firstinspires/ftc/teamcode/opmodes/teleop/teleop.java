@@ -28,42 +28,47 @@ public class teleop extends LinearOpMode {
 
             Pose2d pose = drive.getPose();
 
-            telemetry.addData("x", pose.position.x);
-            telemetry.addData("y", pose.position.y);
-            telemetry.addData("heading (deg)", Math.toDegrees(pose.heading.toDouble()));
-            telemetry.addData("extension", slide.getHeight());
-            telemetry.addData("degrees", pivot.getHeight());
-            telemetry.update();
-
 
             if(gamepad1.start && gamepad1.back) {
                 drive.zeroWheels();
             }
-
-            if(gamepad1.a) {
+            //linear slide
+            if(gamepad1.right_trigger > 0.5) {
                 slide.goUp();
-            } else if (gamepad1.b) {
+            } else if (gamepad1.left_trigger>0.5) {
                 slide.goDown();
             } else {
                 slide.stop();
             }
             //need encoders!!!!!
 
-            if(gamepad1.x) {
+            if(gamepad1.b) {
                 claw.openClaw();
-            } else if(gamepad1.y) {
+            } else if(gamepad1.x) {
                 claw.closeClaw();
             } else {
                 claw.stopClaw();
             }
-
+            //pivot
             if(gamepad1.left_bumper){
                 pivot.goUp();
+                telemetry.addData("Going Up", true);
             } else if (gamepad1.right_bumper){
                 pivot.goDown();
+                telemetry.addData("Going Down", true);
             } else {
                 pivot.stop();
             }
+
+            telemetry.addData("x", pose.position.x);
+            telemetry.addData("y", pose.position.y);
+            telemetry.addData("heading (deg)", Math.toDegrees(pose.heading.toDouble()));
+            telemetry.addData("extension", slide.getHeight());
+            telemetry.addData("degrees", pivot.getHeight());
+            telemetry.addData("arm power", pivot.getPower());
+            telemetry.addData("arm angle", pivot.getAngle());
+            telemetry.update();
+
         }
 
 
