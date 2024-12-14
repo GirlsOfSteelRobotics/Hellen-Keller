@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import static org.firstinspires.ftc.teamcode.opmodes.TestLinearSlide.SLIDE_GOAL;
+import static org.firstinspires.ftc.teamcode.opmodes.TestPivot.PIVOT_GOAL;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -41,7 +44,9 @@ public class teleop extends LinearOpMode {
                 slide.stop();
             }
             //need encoders!!!!!
-
+            if (gamepad1.dpad_left){
+                pivot.zeroEncoder();
+            }
             if(gamepad1.b) {
                 claw.openClaw();
             } else if(gamepad1.x) {
@@ -59,6 +64,16 @@ public class teleop extends LinearOpMode {
             } else {
                 pivot.stop();
             }
+
+            if (gamepad2.a){
+                pivot.goToAngle(PIVOT_GOAL);
+                slide.goToLength(SLIDE_GOAL);
+            } else {
+                pivot.stop();
+                slide.stop();
+            }
+
+
 
             telemetry.addData("x", pose.position.x);
             telemetry.addData("y", pose.position.y);

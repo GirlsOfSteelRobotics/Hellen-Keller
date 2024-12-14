@@ -129,6 +129,7 @@ public class MecanumDrivetrain {
 
     public void zeroPose() {
         pose = new Pose2d(0, 0, 0);
+        localizer.setPosition(pose);
     }
 
     public GoBildaPinpointDriverRR getLocalizer() {

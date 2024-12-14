@@ -12,23 +12,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Config
 public class Pivot {
     private static final double TICKS_PER_INCH_PIVOT = 1;
-    //prolly have to change
-
-    private static final double INITIAL_HEIGHT = 0;
-    public static  double KP = 0.005;
-    //have to find the KP slop
-    public static double LOW_BASKET_SCORING_ANGLE = 150;
-    //have to tune this to find this
+    public static  double KP = 0.0005;
     public static boolean ENFORCE_LIMITS = true;
-    //need this for the limit on the top baskets and the low baskets
-    //have to do PID for these values also to find the ticks
-    public static double INTAKE_ANGLE = 270;
     public static double LOWER_LIMIT = 0;
-    public static double UPPER_LIMIT = 94;
-    //have to do pid to make sure that this is all right
-    public static double UP_POWER = .75;
-    public static double DOWN_POWER = -0.2;
-
+    public static double UPPER_LIMIT = -600;
+    public static double MAX_PID_POWER = 0.8;
     private static double tickOffset;
     private final DcMotor pivotMotor;
     OverflowEncoder encoder;
@@ -37,22 +25,22 @@ public class Pivot {
         pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
         pivotMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        DcMotorEx hackEncoderMotor = hardwareMap.get(DcMotorEx.class, "rightBack");//get the name of the motor
+        DcMotorEx hackEncoderMotor = hardwareMap.get(DcMotorEx.class, "pivotMotor");//get the name of the motor
         encoder = new OverflowEncoder(new RawEncoder(hackEncoderMotor));
     }
 
     public void goUp() {
-        if(ENFORCE_LIMITS && getAngle()>UPPER_LIMIT ) {
+        if(ENFORCE_LIMITS && getAngle()<UPPER_LIMIT ) {
             pivotMotor.setPower(0);
         } else {
-            pivotMotor.setPower(0.5);
+            pivotMotor.setPower(1);
             //might have to change later based on how heavy it is
         }
 //        pivotMotor.setPower(UP_POWER);
     }
 
     public void goDown() {
-       if (ENFORCE_LIMITS && getAngle()<LOWER_LIMIT) {
+       if (ENFORCE_LIMITS && getAngle()>LOWER_LIMIT) {
            pivotMotor.setPower(0);
        } else {
            pivotMotor.setPower(-0.2);
@@ -74,11 +62,23 @@ public class Pivot {
         return (ticks.position - tickOffset) * TICKS_PER_INCH_PIVOT;
     }
 
-//    public boolean goToAngle(double angle){
-//        double error = getAngle()-angle;
-//        double power = KP * error;
-//        //idk ask pj for help on this one
-//    }
+    public boolean goToAngle(double angle) {
+        double error = getAngle()-angle;
+        double power = -KP * error;
+        if (power > MAX_PID_POWER) {
+            power = MAX_PID_POWER;
+        } else if (power < -MAX_PID_POWER) {
+            power = -MAX_PID_POWER;
+        }
+        pivotMotor.setPower(power);
+        if (Math.abs(error) > 50) {
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
     public double getPower() {
         return pivotMotor.getPower();
     }
