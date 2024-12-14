@@ -20,6 +20,7 @@ public class Pivot {
     private static double tickOffset;
     private final DcMotor pivotMotor;
     OverflowEncoder encoder;
+    private static double HELLO_EHSTA = 0;
 
     public Pivot(HardwareMap hardwareMap) {
         pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
